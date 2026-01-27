@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-
+import Image from 'next/image'
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -18,10 +18,16 @@ export const metadata: Metadata = {
   description: "FIKA Coffee House - Open 24/7 in Amman, Jordan. Discover our carefully crafted selection of beverages and food, made with the finest ingredients and lots of love.",
   keywords: ["FIKA", "Coffee", "Amman", "Jordan", "Coffee House", "Cafe", "Espresso", "Latte"],
   authors: [{ name: "FIKA Coffee House" }],
+    icons: {
+    icon: "/Logo.jpeg",
+    shortcut: "/Logo.jpeg",
+    apple: "/Logo.jpeg",
+  },
   openGraph: {
     title: "FIKA Coffee House",
     description: "Experience exceptional coffee in the heart of Jordan. Open 24/7 for your perfect coffee moment.",
     type: "website",
+      images: ["/Logo.jpeg"],
   },
 };
 
@@ -40,6 +46,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
+      <header className="p-4">
+    <Image
+      src="/Logo.jpeg"
+      alt="FIKA Coffee House"
+      width={140}
+      height={60}
+      priority
+    />
+  </header>
+
         {children}
         <Toaster />
       </body>
