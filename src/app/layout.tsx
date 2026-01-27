@@ -46,15 +46,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-      <header className="p-4">
-    <Image
-      src="/Logo.jpeg"
-      alt="FIKA Coffee House"
-      width={140}
-      height={60}
-      priority
-    />
-  </header>
+
 
         {children}
         <Toaster />
