@@ -201,7 +201,7 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [loginForm, setLoginForm] = useState({ username: '', password: '' })
   const [loginError, setLoginError] = useState('')
-  const [heroBackgroundImage, setHeroBackgroundImage] = useState('https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1920&q=80')
+  const [heroBackgroundImage, setHeroBackgroundImage] = useState('@/../public/Bg.jpeg')
 
   // Menu categories and subcategories
   const menuCategories = [
