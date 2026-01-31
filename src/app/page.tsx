@@ -375,6 +375,7 @@ export default function Home() {
   const [events, setEvents] = useState<Event[]>(initialEvents);
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
   const [menuTab, setMenuTab] = useState("hot-drinks");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
@@ -517,115 +518,137 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Navigation Bar */}
-      <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center">
-              <button
-                onClick={() => setCurrentPage("home")}
-                className="flex items-center space-x-2"
-              >
-                <Image src={FIKA} alt="" className="w-[50px]" />
-              </button>
-            </div>
+      <nav className="sticky top-0 z-50 bg-white border-b">
+        <div className="container mx-auto px-4">
+         <div className="relative flex h-16 items-center">
+  {/* LEFT – Logo (fixed width) */}
+  <div className="w-48 flex items-center">
+    <button
+      onClick={() => setCurrentPage("home")}
+      className="flex items-center"
+    >
+      <Image src={FIKA} alt="FIKA" className="w-[50px]" />
+    </button>
+  </div>
 
-            {/* Navigation Tabs */}
-            <div className="hidden md:flex items-center space-x-8">
-              <button
-                onClick={() => setCurrentPage("home")}
-                className={`text-sm font-medium transition-colors hover:text-foreground ${
-                  currentPage === "home"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Home
-              </button>
-              <button
-                onClick={() => setCurrentPage("menu")}
-                className={`text-sm font-medium transition-colors hover:text-foreground ${
-                  currentPage === "menu"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Menu
-              </button>
-              <button
-                onClick={() => setCurrentPage("events")}
-                className={`text-sm font-medium transition-colors hover:text-foreground ${
-                  currentPage === "events"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Events
-              </button>
-              <button
-                onClick={() => setCurrentPage("gallery")}
-                className={`text-sm font-medium transition-colors hover:text-foreground ${
-                  currentPage === "gallery"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Gallery
-              </button>
-              <button
-                onClick={() =>
-                  isLoggedIn ? setCurrentPage("admin") : setCurrentPage("login")
-                }
-                className={`text-sm font-medium transition-colors hover:text-foreground ${
-                  currentPage === "admin" || currentPage === "login"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {isLoggedIn ? "Admin" : "Login"}
-              </button>
-            </div>
+  {/* CENTER – Tabs (true center) */}
+  <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8">
+    {[
+      ["home", "Home"],
+      ["menu", "Menu"],
+      ["events", "Events"],
+      ["gallery", "Gallery"],
+    ].map(([page, label]) => (
+      <button
+        key={page}
+        onClick={() => setCurrentPage(page as PageType)}
+        className={`text-sm font-medium transition ${
+          currentPage === page
+            ? "text-foreground"
+            : "text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        {label}
+      </button>
+    ))}
 
-            {/* Contact Button */}
-            <button
-              onClick={() => setCurrentPage("contact")}
-              className="px-4 py-2 text-sm font-medium border-2 border-foreground rounded-md hover:bg-foreground hover:text-background transition-all duration-300"
-            >
-              Contact
-            </button>
-          </div>
+    <button
+      onClick={() =>
+        isLoggedIn ? setCurrentPage("admin") : setCurrentPage("login")
+      }
+      className="text-sm font-medium"
+    >
+      {isLoggedIn ? "Admin" : "Login"}
+    </button>
+  </div>
 
-          {/* Mobile Navigation */}
-          <div className="md:hidden flex justify-center space-x-6 pb-3">
+  {/* RIGHT – Contact (same width as left) */}
+  <div className="w-48 ml-auto hidden md:flex justify-end">
+    <button
+      onClick={() => setCurrentPage("contact")}
+      className="px-4 py-2 border-2 font-semibold border-foreground rounded-md hover:bg-foreground hover:text-white transition"
+    >
+      Contact
+    </button>
+  </div>
+
+  {/* MOBILE – Hamburger */}
+  <button
+    className="ml-auto md:hidden p-2"
+    onClick={() => setMobileMenuOpen(true)}
+  >
+    <div className="space-y-1">
+      <span className="block w-6 h-0.5 bg-black" />
+      <span className="block w-6 h-0.5 bg-black" />
+      <span className="block w-6 h-0.5 bg-black" />
+    </div>
+  </button>
+</div>
+
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      <div
+        className={`fixed inset-0 z-50 md:hidden ${
+          mobileMenuOpen ? "visible" : "invisible"
+        }`}
+      >
+        {/* Backdrop */}
+        <div
+          className={`absolute inset-0 bg-black/50 transition-opacity ${
+            mobileMenuOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        {/* Drawer */}
+        <div
+          className={`absolute top-0 right-0 h-full w-72 bg-white shadow-xl transform transition-transform duration-300 ${
+            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="p-6 space-y-6">
             <button
-              onClick={() => setCurrentPage("home")}
-              className={`text-sm font-medium ${currentPage === "home" ? "text-foreground" : "text-muted-foreground"}`}
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-sm text-muted-foreground"
             >
-              Home
+              Close ✕
             </button>
+
+            {[
+              ["home", "Home"],
+              ["menu", "Menu"],
+              ["events", "Events"],
+              ["gallery", "Gallery"],
+              ["contact", "Contact"],
+            ].map(([page, label]) => (
+              <button
+                key={page}
+                onClick={() => {
+                  setCurrentPage(page as PageType);
+                  setMobileMenuOpen(false);
+                }}
+                className="block text-lg font-medium"
+              >
+                {label}
+              </button>
+            ))}
+
+            <Separator />
+
             <button
-              onClick={() => setCurrentPage("menu")}
-              className={`text-sm font-medium ${currentPage === "menu" ? "text-foreground" : "text-muted-foreground"}`}
-            >
-              Menu
-            </button>
-            <button
-              onClick={() => setCurrentPage("events")}
-              className={`text-sm font-medium ${currentPage === "events" ? "text-foreground" : "text-muted-foreground"}`}
-            >
-              Events
-            </button>
-            <button
-              onClick={() =>
-                isLoggedIn ? setCurrentPage("admin") : setCurrentPage("login")
-              }
-              className={`text-sm font-medium ${currentPage === "admin" || currentPage === "login" ? "text-foreground" : "text-muted-foreground"}`}
+              onClick={() => {
+                setCurrentPage(isLoggedIn ? "admin" : "login");
+                setMobileMenuOpen(false);
+              }}
+              className="text-lg font-medium"
             >
               {isLoggedIn ? "Admin" : "Login"}
             </button>
           </div>
         </div>
-      </nav>
+      </div>
 
       {/* Main Content */}
       <main className="flex-1">
