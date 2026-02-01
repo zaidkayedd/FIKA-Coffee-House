@@ -750,7 +750,9 @@ export default function Home() {
                absolute
                top-35 right-80
                shadow-2xl
-               opacity-90"
+               opacity-90
+                              hidden md:flex
+"
                   />
 
                   {/* Top Image */}
