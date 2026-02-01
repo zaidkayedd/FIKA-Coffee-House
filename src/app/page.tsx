@@ -386,7 +386,9 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [loginError, setLoginError] = useState("");
-  const [heroBackgroundImage, setHeroBackgroundImage] = useState("/Bg.jpeg");
+  // const [heroBackgroundImage, setHeroBackgroundImage] = useState("/Bg.jpeg");
+  const [heroImageTop, setHeroImageTop] = useState<string>("/Bg.jpeg");
+  const [heroImageBottom, setHeroImageBottom] = useState<string>("/Bg.jpeg");
 
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const galleryRef = useRef<HTMLDivElement>(null);
@@ -520,71 +522,70 @@ export default function Home() {
       {/* Navigation Bar */}
       <nav className="sticky top-0 z-50 bg-white border-b">
         <div className="container mx-auto px-4">
-         <div className="relative flex h-16 items-center">
-  {/* LEFT – Logo (fixed width) */}
-  <div className="w-48 flex items-center">
-    <button
-      onClick={() => setCurrentPage("home")}
-      className="flex items-center"
-    >
-      <Image src={FIKA} alt="FIKA" className="w-[50px]" />
-    </button>
-  </div>
+          <div className="relative flex h-16 items-center">
+            {/* LEFT – Logo (fixed width) */}
+            <div className="w-48 flex items-center">
+              <button
+                onClick={() => setCurrentPage("home")}
+                className="flex items-center"
+              >
+                <Image src={FIKA} alt="FIKA" className="w-[50px]" />
+              </button>
+            </div>
 
-  {/* CENTER – Tabs (true center) */}
-  <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8">
-    {[
-      ["home", "Home"],
-      ["menu", "Menu"],
-      ["events", "Events"],
-      ["gallery", "Gallery"],
-    ].map(([page, label]) => (
-      <button
-        key={page}
-        onClick={() => setCurrentPage(page as PageType)}
-        className={`text-sm font-medium transition ${
-          currentPage === page
-            ? "text-foreground"
-            : "text-muted-foreground hover:text-foreground"
-        }`}
-      >
-        {label}
-      </button>
-    ))}
+            {/* CENTER – Tabs (true center) */}
+            <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8">
+              {[
+                ["home", "Home"],
+                ["menu", "Menu"],
+                ["events", "Events"],
+                ["gallery", "Gallery"],
+              ].map(([page, label]) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page as PageType)}
+                  className={`text-sm font-medium transition ${
+                    currentPage === page
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
 
-    <button
-      onClick={() =>
-        isLoggedIn ? setCurrentPage("admin") : setCurrentPage("login")
-      }
-      className="text-sm font-medium"
-    >
-      {isLoggedIn ? "Admin" : "Login"}
-    </button>
-  </div>
+              <button
+                onClick={() =>
+                  isLoggedIn ? setCurrentPage("admin") : setCurrentPage("login")
+                }
+                className="text-sm font-medium"
+              >
+                {isLoggedIn ? "Admin" : "Login"}
+              </button>
+            </div>
 
-  {/* RIGHT – Contact (same width as left) */}
-  <div className="w-48 ml-auto hidden md:flex justify-end">
-    <button
-      onClick={() => setCurrentPage("contact")}
-      className="px-4 py-2 border-2 font-semibold border-foreground rounded-md hover:bg-foreground hover:text-white transition"
-    >
-      Contact
-    </button>
-  </div>
+            {/* RIGHT – Contact (same width as left) */}
+            <div className="w-48 ml-auto hidden md:flex justify-end">
+              <button
+                onClick={() => setCurrentPage("contact")}
+                className="px-4 py-2 border-2 font-semibold border-foreground rounded-md hover:bg-foreground hover:text-white transition"
+              >
+                Contact
+              </button>
+            </div>
 
-  {/* MOBILE – Hamburger */}
-  <button
-    className="ml-auto md:hidden p-2"
-    onClick={() => setMobileMenuOpen(true)}
-  >
-    <div className="space-y-1">
-      <span className="block w-6 h-0.5 bg-black" />
-      <span className="block w-6 h-0.5 bg-black" />
-      <span className="block w-6 h-0.5 bg-black" />
-    </div>
-  </button>
-</div>
-
+            {/* MOBILE – Hamburger */}
+            <button
+              className="ml-auto md:hidden p-2"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <div className="space-y-1">
+                <span className="block w-6 h-0.5 bg-black" />
+                <span className="block w-6 h-0.5 bg-black" />
+                <span className="block w-6 h-0.5 bg-black" />
+              </div>
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -706,23 +707,64 @@ export default function Home() {
         {currentPage === "home" && (
           <div className="space-y-0">
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-              <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: `url(${heroBackgroundImage})`,
-                  filter: "brightness(0.4)",
-                }}
-              />
-              <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-                <Image src={FIKA} alt="" className="" />
-                <div className="h-1 w-full max-w-2xl mx-auto mb-6 bg-gradient-to-r from-transparent via-[oklch(0.828_0.189_84.429)] to-transparent" />
-                <p className="text-2xl md:text-4xl text-background mb-8 font-light tracking-wide">
-                  "Experience Exceptional Coffee"
-                </p>
-                <button className="px-8 py-4 text-lg font-semibold border-2 border-background rounded-full text-background hover:bg-background hover:text-foreground transition-all duration-1000 animate-pulse">
-                  Open 24/7
-                </button>
+            {/* HERO SECTION */}
+            <section className="relative min-h-screen flex items-center ] overflow-hidden">
+              <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+                {/* LEFT CONTENT */}
+                <div className="text-foreground space-y-8">
+                  <h1 className="text-5xl md:text-6xl xl:text-7xl font-serif font-bold leading-tight">
+                    Discover The <br />
+                    Art Of Perfect <br />
+                    Coffee
+                  </h1>
+
+                  <p className="max-w-xl text-foreground text-lg leading-relaxed">
+                    Experience the rich and bold flavors of our exquisite coffee
+                    blends, crafted to awaken your senses and start your day
+                    right.
+                  </p>
+
+                  {/* Buttons */}
+                  <div className="flex flex-wrap gap-4">
+                    <Button className="px-8 py-6 text-lg font-semibold cursor-pointer hover:scale-105 transition-transform duration-300">
+                      Order Now →
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="px-8 py-6 text-lg border-black text-foreground hover:bg-background  cursor-pointer hover:scale-105 transition-transform duration-300"
+                    >
+                      Explore More
+                    </Button>
+                  </div>
+                </div>
+
+                {/* RIGHT IMAGES */}
+                <div className="relative flex justify-center lg:justify-end">
+                  {/* Bottom Image */}
+                  <img
+                    src={heroImageBottom}
+                    alt="Hero Bottom"
+                    className="w-[280px] md:w-[360px] xl:w-[440px]
+               rounded-xl
+               absolute
+               top-35 right-80
+               shadow-2xl
+               opacity-90"
+                  />
+
+                  {/* Top Image */}
+                  <img
+                    src={heroImageTop}
+                    alt="Hero Top"
+                    className="w-[320px] md:w-[420px] xl:w-[520px]
+               rounded-xl
+               relative
+               z-10
+               shadow-[0_40px_80px_rgba(0,0,0,0.6)]
+               animate-float"
+                  />
+                </div>
               </div>
             </section>
 
@@ -1525,51 +1567,49 @@ export default function Home() {
                   </Card>
                 </TabsContent>
 
-                {/* Settings - Hero Background */}
+                {/* Settings - Hero Imgs */}
                 <TabsContent value="settings">
-                  <Card className="p-6">
-                    <h2 className="text-2xl font-bold mb-4">
-                      Hero Background Image
-                    </h2>
-                    <p className="text-muted-foreground mb-6">
-                      Upload a new background image for the hero section on the
-                      home page.
-                    </p>
-                    <div className="mb-6">
-                      <Label htmlFor="hero-image">Current Hero Image</Label>
-                      <div className="mt-4">
-                        <img
-                          src={heroBackgroundImage}
-                          alt="Current hero background"
-                          className="w-full h-64 object-cover rounded-md"
-                        />
-                      </div>
-                    </div>
+                  <Card className="p-6 space-y-10">
+                    <h2 className="text-2xl font-bold">Hero Section Images</h2>
+
+                    {/* TOP IMAGE */}
                     <div>
-                      <Label htmlFor="upload-hero-image">
-                        Upload New Image
-                      </Label>
-                      <div className="mt-2">
-                        <Input
-                          id="upload-hero-image"
-                          type="file"
-                          accept="image/*"
-                          onChange={async (
-                            e: ChangeEvent<HTMLInputElement>,
-                          ) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              try {
-                                const base64 = await fileToBase64(file);
-                                setHeroBackgroundImage(base64);
-                              } catch (error) {
-                                console.error("Error uploading image:", error);
-                              }
-                            }
-                          }}
-                          className="cursor-pointer"
-                        />
-                      </div>
+                      <Label className="mb-2 block">Top Hero Image</Label>
+                      <img
+                        src={heroImageTop}
+                        className="w-full max-w-sm mx-auto mb-4 object-contain rounded-lg"
+                      />
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const base64 = await fileToBase64(file);
+                          setHeroImageTop(base64);
+                        }}
+                      />
+                    </div>
+
+                    <Separator />
+
+                    {/* BOTTOM IMAGE */}
+                    <div>
+                      <Label className="mb-2 block">Bottom Hero Image</Label>
+                      <img
+                        src={heroImageBottom}
+                        className="w-full max-w-sm mx-auto mb-4 object-contain rounded-lg"
+                      />
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const base64 = await fileToBase64(file);
+                          setHeroImageBottom(base64);
+                        }}
+                      />
                     </div>
                   </Card>
                 </TabsContent>
